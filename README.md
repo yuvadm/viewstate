@@ -9,6 +9,12 @@ from viewstate import ViewState
 vs = ViewState(base64EncodedViewState)
 ```
 
+## Test
+
+```python
+python test.py
+```
+
 ## References
 
  - https://github.com/mutantzombie/JavaScript-ViewState-Parser
