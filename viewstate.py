@@ -2,17 +2,17 @@ from base64 import b64decode, b64encode
 
 
 CONSTS = {
-    '\x64': {},
-    '\x65': '',
-    '\x66': 0,
-    '\x67': True,
-    '\x68': False
+    100: {},
+    101: '',
+    102: 0,
+    103: True,
+    104: False
 }
 
 def parse(b):
-    print([hex(x) for x in b])
-    if len(b) == 1 and b in CONSTS:
-        return CONSTS[b]
+    assert type(b) == bytes().__class__
+    if len(b) == 1 and b[0] in CONSTS:
+        return CONSTS[b[0]]
     return None
 
 

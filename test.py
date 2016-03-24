@@ -19,10 +19,10 @@ class TestViewState(unittest.TestCase):
             vs.raw = b'\x01\x02'
             vs.decode()
 
-    # def test_parse(self):
-    #     vs = ViewState()
-    #     vs.raw = b'\xff\x01\x67'
-    #     self.assertTrue(vs.decode())
+    def test_parse_const_value(self):
+        vs = ViewState()
+        vs.raw = b'\xff\x01\x67'
+        self.assertEquals(vs.decode(), True)
 
 if __name__ == '__main__':
     unittest.main()
