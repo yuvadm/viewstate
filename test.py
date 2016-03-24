@@ -22,7 +22,7 @@ class TestViewState(unittest.TestCase):
     def test_parse_const_value(self):
         vs = ViewState()
         vs.raw = b'\xff\x01\x67'
-        self.assertEquals(vs.decode(), True)
+        self.assertEqual(vs.decode(), True)
 
 if __name__ == '__main__':
     unittest.main()

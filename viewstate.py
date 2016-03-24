@@ -9,10 +9,13 @@ CONSTS = {
     104: False
 }
 
+def parse_const(b):
+    return CONSTS.get(b, None)
+
 def parse(b):
     assert type(b) == bytes().__class__
-    if len(b) == 1 and b[0] in CONSTS:
-        return CONSTS[b[0]]
+    if len(b) == 1:
+        return parse_const(b[0])
     return None
 
 
