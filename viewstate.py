@@ -15,9 +15,9 @@ def parse():
 
 class ViewState(object):
 
-    def __init__(self, base64_encoded):
-        self.base64_encoded = base64_encoded
-        self.raw = b64decode(self.base64_encoded)
+    def __init__(self, base64=''):
+        self.base64 = base64
+        self.raw = b64decode(self.base64)
         self.decoded = None
 
     @property
