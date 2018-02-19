@@ -1,6 +1,6 @@
 import pytest
 
-from viewstate import ViewState
+from viewstate import *
 
 
 class TestViewState(object):
@@ -9,14 +9,13 @@ class TestViewState(object):
         vs = ViewState()
         assert not vs.is_valid()
 
-    @pytest.mark.skip(reason='Missing test data')
     def test_is_valid(self):
-        with open('samples/ngcs.sample', 'r') as f:
+        with open('tests/samples/ngcs.sample', 'r') as f:
             vs = ViewState(f.read())
-            self.assertTrue(vs.is_valid())
+            assert vs.is_valid() is True
 
     def test_invalid_decode(self):
-        with pytest.raises(Exception):
+        with pytest.raises(ViewStateException):
             vs = ViewState()
             vs.raw = b'\x01\x02'
             vs.decode()
