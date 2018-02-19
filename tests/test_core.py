@@ -35,6 +35,11 @@ class TestViewState(object):
         vs.raw = b'\xff\x01\x05\x0a' + s.encode()
         assert vs.decode() == s
 
+    def test_parse_simple_dict(self):
+        vs = ViewState()
+        vs.raw = b'\xff\x01\x18\x02\x05\x01a\x05\x01b\x05\x01c\x05\x01d'
+        assert vs.decode() == {'a': 'b', 'c': 'd'}
+
     def test_parse_simple_pair(self):
         vs = ViewState()
         vs.raw = b'\xff\x01\x0f\x67\x68'

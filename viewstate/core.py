@@ -24,6 +24,16 @@ def parse_pair(b):
     second, remain = _parse(remain)
     return (first, second), remain
 
+def parse_dict(b):
+    n = b[0]
+    d = {}
+    remain = b[1:]
+    for _ in range(n):
+        k, remain = _parse(remain)
+        v, remain = _parse(remain)
+        d[k] = v
+    return d, remain
+
 def _parse(b):
 
     if not b:
@@ -38,6 +48,8 @@ def _parse(b):
         return parse_string(b[1:])
     elif b[0] == 0xf:
         return parse_pair(b[1:])
+    elif b[0] == 0x18:
+        return parse_dict(b[1:])
     else:
         return b, bytes()
 
