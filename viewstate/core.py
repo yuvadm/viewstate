@@ -14,11 +14,30 @@ CONSTS = {
 def parse_const(b):
     return CONSTS.get(b, None)
 
-def parse(b):
-    assert type(b) == bytes().__class__
-    if len(b) == 1:
-        return parse_const(b[0])
+def parse_pair(b):
+    first, remain = _parse(b)
+    second, remain = _parse(remain)
+    return (first, second), remain
+
+def _parse(b):
+
+    if not b:
+        return None
+    else:
+        assert type(b) == bytes().__class__
+        print(b)
+
+    if 100 <= b[0] <= 104:
+        return parse_const(b[0]), b[1:]
+    elif b[0] == 0xf:
+        return parse_pair(b[1:])
+    else:
+        return b, bytes()
+
     return None
+
+def parse(b):
+    return _parse(b)[0]
 
 
 class ViewState(object):
