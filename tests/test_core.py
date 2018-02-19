@@ -14,6 +14,10 @@ class TestViewState(object):
             vs = ViewState(f.read())
             assert vs.is_valid() is True
 
+    def test_invalid_base64(self):
+        with pytest.raises(ViewStateException):
+            vs = ViewState('hello')
+
     def test_invalid_decode(self):
         with pytest.raises(ViewStateException):
             vs = ViewState()

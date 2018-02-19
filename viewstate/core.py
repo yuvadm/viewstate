@@ -1,4 +1,5 @@
 from base64 import b64decode, b64encode
+from binascii import Error as BinAsciiError
 
 from .exceptions import ViewStateException
 
@@ -24,8 +25,11 @@ class ViewState(object):
 
     def __init__(self, base64=''):
         self.base64 = base64
-        self.raw = b64decode(self.base64)
         self.decoded = None
+        try:
+            self.raw = b64decode(self.base64)
+        except BinAsciiError as bae:
+            raise ViewStateException('Cannot decode base64 input')
 
     @property
     def preamble(self):
