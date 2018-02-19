@@ -1,3 +1,3 @@
-from .core import ViewState
+from .viewstate import ViewState
 from .exceptions import ViewStateException
 
