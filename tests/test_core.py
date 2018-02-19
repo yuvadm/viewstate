@@ -60,7 +60,7 @@ class TestViewState(object):
         assert vs.decode() == ((True, '1q2w3e'), 0)
 
     def test_parse_unknown(self):
-        vs = ViewState()
-        vs.raw = b'\xff\x01\x99\x99\x99'
-        assert vs.decode() == b'\x99\x99\x99'
-
+        with pytest.raises(ViewStateException):
+            vs = ViewState()
+            vs.raw = b'\xff\x01\x99\x99\x99'
+            assert vs.decode()

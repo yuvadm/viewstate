@@ -61,6 +61,7 @@ def _parse(b):
     elif b[0] == 0x18:
         return parse_dict(b[1:])
     else:
+        raise ViewStateException('Unable to parse remainder of bytes {}'.format(b))
         return b, bytes()
 
     return None
