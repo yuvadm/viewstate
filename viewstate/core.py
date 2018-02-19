@@ -24,6 +24,15 @@ def parse_pair(b):
     second, remain = _parse(remain)
     return (first, second), remain
 
+def parse_array(b):
+    n = b[0]
+    l = []
+    remain = b[1:]
+    for _ in range(n):
+        val, remain = _parse(remain)
+        l.append(val)
+    return l, remain
+
 def parse_dict(b):
     n = b[0]
     d = {}
@@ -40,7 +49,6 @@ def _parse(b):
         return None
     else:
         assert type(b) == bytes().__class__
-        print(b)
 
     if 100 <= b[0] <= 104:
         return parse_const(b[0]), b[1:]
@@ -48,6 +56,8 @@ def _parse(b):
         return parse_string(b[1:])
     elif b[0] == 0xf:
         return parse_pair(b[1:])
+    elif b[0] == 0x16:
+        return parse_array(b[1:])
     elif b[0] == 0x18:
         return parse_dict(b[1:])
     else:

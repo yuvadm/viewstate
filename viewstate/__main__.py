@@ -1,3 +1,4 @@
+import pprint
 import sys
 
 from .core import ViewState
@@ -5,7 +6,8 @@ from .core import ViewState
 def main():
     s = sys.stdin.read()
     vs = ViewState(s)
-    print(vs.decode())
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(vs.decode())
 
 if __name__ == '__main__':
     main()
