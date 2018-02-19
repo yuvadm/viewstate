@@ -1,21 +1,25 @@
-# .NET Viewstate Decoder
+.NET Viewstate Decoder
+======================
 
 A small Python library for decoding .NET viewstate. Can be used in various scraping scenarios.
 
-## Usage
+Usage
+-----
 
 ```python
 from viewstate import ViewState
 vs = ViewState(base64EncodedViewState)
 ```
 
-## Test
+Test
+----
 
 ```python
 python test.py
 ```
 
-## References
+References
+----------
 
- - https://github.com/mutantzombie/JavaScript-ViewState-Parser
- - http://viewstatedecoder.azurewebsites.net/
+- https://github.com/mutantzombie/JavaScript-ViewState-Parser
+- http://viewstatedecoder.azurewebsites.net/
