@@ -20,8 +20,8 @@ def parse_string(b):
     return s.decode(), b[n+1:]
 
 def parse_pair(b):
-    first, remain = _parse(b)
-    second, remain = _parse(remain)
+    first, remain = parse(b)
+    second, remain = parse(remain)
     return (first, second), remain
 
 def parse_array(b):
@@ -29,7 +29,7 @@ def parse_array(b):
     l = []
     remain = b[1:]
     for _ in range(n):
-        val, remain = _parse(remain)
+        val, remain = parse(remain)
         l.append(val)
     return l, remain
 
@@ -38,12 +38,12 @@ def parse_dict(b):
     d = {}
     remain = b[1:]
     for _ in range(n):
-        k, remain = _parse(remain)
-        v, remain = _parse(remain)
+        k, remain = parse(remain)
+        v, remain = parse(remain)
         d[k] = v
     return d, remain
 
-def _parse(b):
+def parse(b):
 
     if not b:
         return None
@@ -63,11 +63,6 @@ def _parse(b):
     else:
         raise ViewStateException('Unable to parse remainder of bytes {}'.format(b))
         return b, bytes()
-
-    return None
-
-def parse(b):
-    return _parse(b)[0]
 
 
 class ViewState(object):
@@ -97,5 +92,5 @@ class ViewState(object):
     def decode(self):
         if not self.is_valid():
             raise ViewStateException('Cannot decode invalid viewstate, bad preamble')
-        self.decoded = parse(self.body)
+        self.decoded, self.remainder = parse(self.body)
         return self.decoded
