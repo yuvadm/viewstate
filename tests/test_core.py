@@ -29,6 +29,12 @@ class TestViewState(object):
         vs.raw = b'\xff\x01\x67'
         assert vs.decode() is True
 
+    def test_parse_string_value(self):
+        vs = ViewState()
+        s = 'abcdefghij'
+        vs.raw = b'\xff\x01\x05\x0a' + s.encode()
+        assert vs.decode() == s
+
     def test_parse_simple_pair(self):
         vs = ViewState()
         vs.raw = b'\xff\x01\x0f\x67\x68'
@@ -40,6 +46,8 @@ class TestViewState(object):
         assert vs.decode() == (True, (False, 0))
         vs.raw = b'\xff\x01\x0f\x0f\x67\x68\x66'
         assert vs.decode() == ((True, False), 0)
+        vs.raw = b'\xff\x01\x0f\x0f\x67\x05\x061q2w3e\x66'
+        assert vs.decode() == ((True, '1q2w3e'), 0)
 
     def test_parse_unknown(self):
         vs = ViewState()

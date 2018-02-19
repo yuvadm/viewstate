@@ -14,6 +14,11 @@ CONSTS = {
 def parse_const(b):
     return CONSTS.get(b, None)
 
+def parse_string(b):
+    n = b[0]
+    s = b[1:n+1]
+    return s.decode(), b[n+1:]
+
 def parse_pair(b):
     first, remain = _parse(b)
     second, remain = _parse(remain)
@@ -29,6 +34,8 @@ def _parse(b):
 
     if 100 <= b[0] <= 104:
         return parse_const(b[0]), b[1:]
+    elif b[0] == 0x5:
+        return parse_string(b[1:])
     elif b[0] == 0xf:
         return parse_pair(b[1:])
     else:
