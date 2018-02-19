@@ -20,34 +20,28 @@ class TestViewState(object):
 
     def test_invalid_decode(self):
         with pytest.raises(ViewStateException):
-            vs = ViewState()
-            vs.raw = b'\x01\x02'
+            vs = ViewState(raw=b'\x01\x02')
             vs.decode()
 
     def test_parse_const_value(self):
-        vs = ViewState()
-        vs.raw = b'\xff\x01\x67'
+        vs = ViewState(raw=b'\xff\x01\x67')
         assert vs.decode() is True
 
     def test_parse_string_value(self):
-        vs = ViewState()
         s = 'abcdefghij'
-        vs.raw = b'\xff\x01\x05\x0a' + s.encode()
+        vs = ViewState(raw=b'\xff\x01\x05\x0a' + s.encode())
         assert vs.decode() == s
 
     def test_parse_simple_dict(self):
-        vs = ViewState()
-        vs.raw = b'\xff\x01\x18\x02\x05\x01a\x05\x01b\x05\x01c\x05\x01d'
+        vs = ViewState(raw=b'\xff\x01\x18\x02\x05\x01a\x05\x01b\x05\x01c\x05\x01d')
         assert vs.decode() == {'a': 'b', 'c': 'd'}
 
     def test_parse_simple_list(self):
-        vs = ViewState()
-        vs.raw = b'\xff\x01\x16\x05\x05\x01a\x05\x01b\x05\x01c\x05\x01d\x05\x01e'
+        vs = ViewState(raw=b'\xff\x01\x16\x05\x05\x01a\x05\x01b\x05\x01c\x05\x01d\x05\x01e')
         assert vs.decode() == ['a', 'b', 'c', 'd', 'e']
 
     def test_parse_simple_pair(self):
-        vs = ViewState()
-        vs.raw = b'\xff\x01\x0f\x67\x68'
+        vs = ViewState(raw=b'\xff\x01\x0f\x67\x68')
         assert vs.decode() == (True, False)
 
     def test_parse_complex_pair(self):
@@ -61,6 +55,5 @@ class TestViewState(object):
 
     def test_parse_unknown(self):
         with pytest.raises(ViewStateException):
-            vs = ViewState()
-            vs.raw = b'\xff\x01\x99\x99\x99'
+            vs = ViewState(raw=b'\xff\x01\x99\x99\x99')
             assert vs.decode()

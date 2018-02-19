@@ -67,13 +67,16 @@ def parse(b):
 
 class ViewState(object):
 
-    def __init__(self, base64=''):
-        self.base64 = base64
+    def __init__(self, base64=None, raw=None):
+        if base64:
+            self.base64 = base64
+            try:
+                self.raw = b64decode(self.base64)
+            except BinAsciiError as bae:
+                raise ViewStateException('Cannot decode base64 input')
+        elif raw:
+            self.raw = raw
         self.decoded = None
-        try:
-            self.raw = b64decode(self.base64)
-        except BinAsciiError as bae:
-            raise ViewStateException('Cannot decode base64 input')
 
     @property
     def preamble(self):
@@ -87,7 +90,11 @@ class ViewState(object):
         format_marker = b'\xff'
         version_marker = b'\x01'
         preamble = format_marker + version_marker
-        return self.preamble == preamble
+
+        try:
+            return self.preamble == preamble
+        except AttributeError:
+            return False
 
     def decode(self):
         if not self.is_valid():
