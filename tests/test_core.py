@@ -10,9 +10,10 @@ class TestViewState(object):
         assert not vs.is_valid()
 
     def test_is_valid(self):
-        with open('tests/samples/ngcs.sample', 'r') as f:
-            vs = ViewState(f.read())
-            assert vs.is_valid() is True
+        for s in ['ngcs', 'mot']:
+            with open(f'tests/samples/{s}.sample', 'r') as f:
+                vs = ViewState(f.read())
+                assert vs.is_valid() is True
 
     def test_invalid_base64(self):
         with pytest.raises(ViewStateException):
