@@ -1,7 +1,7 @@
 import pprint
 import sys
 
-from .core import ViewState
+from .viewstate import ViewState
 
 def main():
     s = sys.stdin.read()

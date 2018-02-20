@@ -23,6 +23,10 @@ class TestViewState(object):
             vs = ViewState(raw=b'\x01\x02')
             vs.decode()
 
+    def test_parse_int_value(self):
+        vs = ViewState(raw=b'\xff\x01\x02\x88\x01')
+        assert vs.decode() == 136
+
     def test_parse_const_value(self):
         vs = ViewState(raw=b'\xff\x01\x67')
         assert vs.decode() is True
