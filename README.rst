@@ -16,6 +16,12 @@ There are two main ways to use this package. First, it can be used as an importe
   vs = ViewState(base64EncodedViewState)
   decoded_state = vs.decode()
 
+It is also possible to feed the raw bytes directly:
+
+::
+
+  vs = ViewState(raw='\xff\x01....')
+
 Alternatively, the library can be used via command line by directly executing the module:
 
 ::
