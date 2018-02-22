@@ -16,7 +16,7 @@ There are two main ways to use this package. First, it can be used as an importe
   vs = ViewState(base64EncodedViewState)
   decoded_state = vs.decode()
 
-Alternatively, the library can be used via command line by executing the model:
+Alternatively, the library can be used via command line by directly executing the module:
 
 ::
 
@@ -27,7 +27,7 @@ Which will pretty-print the decoded data structure.
 Development
 -----------
 
-Unit test are run via `pytest`
+Unit test are run via ``pytest``
 
 References
 ----------
