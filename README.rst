@@ -20,7 +20,7 @@ It is also possible to feed the raw bytes directly:
 
 ::
 
-  vs = ViewState(raw='\xff\x01....')
+  vs = ViewState(raw=b'\xff\x01....')
 
 Alternatively, the library can be used via command line by directly executing the module:
 
