@@ -26,8 +26,9 @@ def parse_int(b):
 
 def parse_string(b):
     n = b[0]
-    s = b[1:n+1]
-    return s.decode(), b[n+1:]
+    n, remain = parse_int(b)
+    s = remain[:n]
+    return s.decode(), remain[n:]
 
 def parse_enum(b):
     if b[0] == 0x29:
@@ -42,10 +43,17 @@ def parse_pair(b):
     second, remain = parse(remain)
     return (first, second), remain
 
-def parse_array(b):
-    n = b[0]
+def parse_str_array(b):
+    n, remain = parse_int(b)
     l = []
-    remain = b[1:]
+    for _ in range(n):
+        val, remain = parse_string(remain)
+        l.append(val)
+    return l, remain
+
+def parse_array(b):
+    n, remain = parse_int(b)
+    l = []
     for _ in range(n):
         val, remain = parse(remain)
         l.append(val)
@@ -60,6 +68,14 @@ def parse_dict(b):
         v, remain = parse(remain)
         d[k] = v
     return d, remain
+
+def parse_type(b):
+    if b[0] in (0x29, 0x2a):
+        return parse_string(b[1:])
+    elif b[0] == 0x2b:
+        return parse_int(b[1:])
+    else:
+        raise ViewStateException(f'Unknown type flag at {len(b)} bytes {b[:20]}')
 
 def parse(b):
     if not b:
@@ -77,11 +93,15 @@ def parse(b):
         return parse_enum(b[1:])
     elif b[0] == 0xf:
         return parse_pair(b[1:])
+    elif b[0] == 0x14:
+        return parse_type(b[1:])
+    elif b[0] == 0x15:
+        return parse_str_array(b[1:])
     elif b[0] == 0x16:
         return parse_array(b[1:])
     elif b[0] == 0x18:
         return parse_dict(b[1:])
     else:
-        raise ViewStateException('Unable to parse remainder of bytes {}'.format(b))
+        raise ViewStateException(f'Unable to parse remainder of {len(b)} bytes {b[:20]}')
         return b, bytes()
 
