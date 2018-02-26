@@ -11,7 +11,7 @@ class TestViewState(object):
 
     def test_is_valid(self):
         for s in ['ngcs', 'mot', 'ecom']:
-            with open(f'tests/samples/{s}.sample', 'r') as f:
+            with open('tests/samples/{}.sample'.format(s), 'r') as f:
                 vs = ViewState(f.read())
                 assert vs.is_valid() is True
 

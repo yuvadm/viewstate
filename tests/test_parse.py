@@ -46,7 +46,7 @@ class TestParse(object):
 
     def test_parse_samples(self):
         for s in ['ngcs', 'mot', 'ecom']:
-            with open(f'tests/samples/{s}.sample', 'r') as f:
+            with open('tests/samples/{}.sample'.format(s), 'r') as f:
                 vs = ViewState(f.read())
                 _ = vs.decode()
 
