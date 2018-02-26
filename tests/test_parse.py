@@ -43,3 +43,10 @@ class TestParse(object):
         with pytest.raises(ViewStateException):
             vs = ViewState(raw=b'\xff\x01\x99\x99\x99')
             assert vs.decode()
+
+    def test_parse_samples(self):
+        for s in ['ngcs', 'mot', 'ecom']:
+            with open(f'tests/samples/{s}.sample', 'r') as f:
+                vs = ViewState(f.read())
+                _ = vs.decode()
+
