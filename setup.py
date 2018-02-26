@@ -7,7 +7,7 @@ with open(str(Path(__file__).resolve().parents[0] / 'README.rst'), encoding='utf
 
 setup(
     name='viewstate',
-    version='0.1.1',
+    version='0.1.2',
     author='Yuval Adam',
     author_email='_@yuv.al',
     description='.NET viewstate decoder',
