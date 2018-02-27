@@ -1,7 +1,7 @@
 from .exceptions import ViewStateException
 
 CONSTS = {
-    100: {},
+    100: None,
     101: '',
     102: 0,
     103: True,
@@ -19,7 +19,7 @@ def parse_int(b):
         tmp = b[i]
         i += 1
         n |= (tmp & 0x7f) << bits
-        if not tmp & 0x80:
+        if not (tmp & 0x80):
             return n, b[i:]
         bits += 7
     return n, b[i:]  # overflow
@@ -47,7 +47,10 @@ def parse_str_array(b):
     n, remain = parse_int(b)
     l = []
     for _ in range(n):
-        val, remain = parse_string(remain)
+        if not remain[0]:
+            val, remain = '', remain[1:]
+        else:
+            val, remain = parse_string(remain)
         l.append(val)
     return l, remain
 
