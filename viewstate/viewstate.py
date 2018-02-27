@@ -27,12 +27,12 @@ class ViewState(object):
         return self.raw[2:]
 
     def is_valid(self):
-        format_marker = b'\xff'
-        version_marker = b'\x01'
-        preamble = format_marker + version_marker
+        FORMAT_MARKER = b'\xff'
+        VERSION_MARKER = b'\x01'
+        PREAMBLE = FORMAT_MARKER + VERSION_MARKER
 
         try:
-            return self.preamble == preamble
+            return self.preamble == PREAMBLE
         except AttributeError:
             return False
 
