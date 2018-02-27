@@ -59,6 +59,17 @@ def parse_array(b):
         l.append(val)
     return l, remain
 
+def parse_sparse_array(b):
+    type, remain = parse_type(b)
+    length, remain = parse_int(remain)
+    n, remain = parse_int(remain)
+    l = [None] * length
+    for _ in range(n):
+        idx, remain = parse_int(remain)
+        val, remain = parse(remain)
+        l[idx] = val
+    return l, remain
+
 def parse_dict(b):
     n = b[0]
     d = {}
@@ -101,6 +112,10 @@ def parse(b):
         return parse_array(b[1:])
     elif b[0] == 0x18:
         return parse_dict(b[1:])
+    elif b[0] == 0x1f:
+        return parse_int(b[1:])
+    elif b[0] == 0x3c:
+        return parse_sparse_array(b[1:])
     else:
         raise ViewStateException(f'Unable to parse remainder of {len(b)} bytes {b[:20]}')
         return b, bytes()
