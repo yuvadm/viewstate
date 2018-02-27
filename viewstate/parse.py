@@ -95,6 +95,15 @@ def parse_type(b):
     else:
         raise ViewStateException(f'Unknown type flag at {len(b)} bytes {b[:20]}')
 
+def parse_typed_array(b):
+    typeval, remain = parse_type(b)
+    n, remain = parse_int(remain)
+    l = []
+    for _ in range(n):
+        val, remain = parse(remain)
+        l.append(val)
+    return l, remain
+
 def parse(b):
     if not b:
         return None
@@ -112,7 +121,7 @@ def parse(b):
     elif b[0] == 0xf:
         return parse_pair(b[1:])
     elif b[0] == 0x14:
-        return parse_type(b[1:])
+        return parse_typed_array(b[1:])
     elif b[0] == 0x15:
         return parse_str_array(b[1:])
     elif b[0] == 0x16:
