@@ -59,6 +59,10 @@ def parse_array(b):
         l.append(val)
     return l, remain
 
+def parse_stringref(b):
+    val, remain = parse_int(b)
+    return 'Stringref #{}'.format(val), remain
+
 def parse_sparse_array(b):
     type, remain = parse_type(b)
     length, remain = parse_int(remain)
@@ -113,7 +117,7 @@ def parse(b):
     elif b[0] == 0x18:
         return parse_dict(b[1:])
     elif b[0] == 0x1f:
-        return parse_int(b[1:])
+        return parse_stringref(b[1:])
     elif b[0] == 0x3c:
         return parse_sparse_array(b[1:])
     else:
