@@ -93,7 +93,7 @@ def parse_type(b):
     elif b[0] == 0x2b:
         return parse_int(b[1:])
     else:
-        raise ViewStateException(f'Unknown type flag at {len(b)} bytes {b[:20]}')
+        raise ViewStateException('Unknown type flag at {} bytes {}'.format(len(b), b[:20]))
 
 def parse_typed_array(b):
     typeval, remain = parse_type(b)
@@ -133,6 +133,6 @@ def parse(b):
     elif b[0] == 0x3c:
         return parse_sparse_array(b[1:])
     else:
-        raise ViewStateException(f'Unable to parse remainder of {len(b)} bytes {b[:20]}')
+        raise ViewStateException('Unable to parse remainder of {} bytes {}'.format(len(b), b[:20]))
         return b, bytes()
 
