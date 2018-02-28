@@ -6,6 +6,13 @@ A small Python 3 library for decoding .NET viewstate. Can be used in various scr
 .. image:: https://travis-ci.org/yuvadm/viewstate.svg?branch=master
     :target: https://travis-ci.org/yuvadm/viewstate
 
+Install
+-------
+
+.. code-block:: shell
+
+   $ pip install viewstate
+
 Usage
 -----
 
