@@ -31,12 +31,13 @@ def parse_string(b):
     return s.decode(), remain[n:]
 
 def parse_enum(b):
-    if b[0] == 0x29:
-        n, remain = parse_int(b[1:])
-        for _ in range(n):
-            return remain[:n], remain[n+1:]
-    else:
-        pass
+    if b[0] in (0x29, 0x2a):
+        enum, remain = parse_string(b[1:])
+    elif b[0] == 0x2b:
+        enum, remain = parse_int(b[1:])
+    val, remain = parse_int(remain)  # unsure about this part
+    final = 'Enum: {}, val: {}'.format(enum, val)
+    return final, remain
 
 def parse_pair(b):
     first, remain = parse(b)
@@ -118,15 +119,15 @@ def parse(b):
 
     if 100 <= b[0] <= 104:
         return parse_const(b[0]), b[1:]
-    elif b[0] == 0x2:
+    elif b[0] == 0x02:
         return parse_int(b[1:])
-    elif b[0] in (0x5, 0x1e):
+    elif b[0] in (0x05, 0x1e):
         return parse_string(b[1:])
     elif b[0] == 0x10:
         return parse_triplet(b[1:])
-    elif b[0] == 0xb:
+    elif b[0] == 0x0b:
         return parse_enum(b[1:])
-    elif b[0] == 0xf:
+    elif b[0] == 0x0f:
         return parse_pair(b[1:])
     elif b[0] == 0x14:
         return parse_typed_array(b[1:])
