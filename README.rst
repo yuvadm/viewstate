@@ -43,7 +43,9 @@ Which will pretty-print the decoded data structure.
 Development
 -----------
 
-Unit test are run via ``pytest``
+.. code-block:: shell
+
+  $ pytest
 
 References
 ----------
