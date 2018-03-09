@@ -32,6 +32,10 @@ class TestParse(object):
         vs = ViewState(raw=b'\xff\x01\x0f\x67\x68')
         assert vs.decode() == (True, False)
 
+    def test_simple_triplet(self):
+        vs = ViewState(raw=b'\xff\x01\x10\x67\x68\x67')
+        assert vs.decode() == (True, False, True)
+
     def test_complex_pair(self):
         vs = ViewState()
         vs.raw = b'\xff\x01\x0f\x67\x0f\x68\x66'

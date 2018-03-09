@@ -43,6 +43,12 @@ def parse_pair(b):
     second, remain = parse(remain)
     return (first, second), remain
 
+def parse_triplet(b):
+    first, remain = parse(b)
+    second, remain = parse(remain)
+    third, remain = parse(remain)
+    return (first, second, third), remain
+
 def parse_str_array(b):
     n, remain = parse_int(b)
     l = []
@@ -116,6 +122,8 @@ def parse(b):
         return parse_int(b[1:])
     elif b[0] in (0x5, 0x1e):
         return parse_string(b[1:])
+    elif b[0] == 0x10:
+        return parse_triplet(b[1:])
     elif b[0] == 0xb:
         return parse_enum(b[1:])
     elif b[0] == 0xf:
