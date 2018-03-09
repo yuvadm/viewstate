@@ -1,5 +1,7 @@
 import pytest
 
+from os import walk
+from os.path import join
 from viewstate import *
 
 
@@ -45,8 +47,9 @@ class TestParse(object):
             assert vs.decode()
 
     def test_parse_samples(self):
-        for s in ['ngcs', 'mot', 'ecom']:
-            with open('tests/samples/{}.sample'.format(s), 'r') as f:
-                vs = ViewState(f.read())
-                _ = vs.decode()
+        for root, dirs, files in walk('tests/samples'):
+            for f in files:
+                with open(join(root, f), 'r') as t:
+                    vs = ViewState(t.read())
+                    _ = vs.decode()
 

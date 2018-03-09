@@ -1,5 +1,7 @@
 import pytest
 
+from os import walk
+from os.path import join
 from viewstate import *
 
 
@@ -10,10 +12,11 @@ class TestViewState(object):
         assert not vs.is_valid()
 
     def test_is_valid(self):
-        for s in ['ngcs', 'mot', 'ecom']:
-            with open('tests/samples/{}.sample'.format(s), 'r') as f:
-                vs = ViewState(f.read())
-                assert vs.is_valid() is True
+        for root, dirs, files in walk('tests/samples'):
+            for f in files:
+                with open(join(root, f), 'r') as t:
+                    vs = ViewState(t.read())
+                    assert vs.is_valid() is True
 
     def test_invalid_base64(self):
         with pytest.raises(ViewStateException):
