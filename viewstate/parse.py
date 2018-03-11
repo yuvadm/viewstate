@@ -39,6 +39,12 @@ def parse_enum(b):
     final = 'Enum: {}, val: {}'.format(enum, val)
     return final, remain
 
+def parse_color(b):
+    # No specification for color parsing, we're assuming it's just two bytes
+    # One example we have is that `\n\x91\x01` is parsed as `Color: Color [Salmon]`
+    # Originally reported in https://github.com/yuvadm/viewstate/issues/2
+    return 'Color: unknown', b[2:]
+
 def parse_pair(b):
     first, remain = parse(b)
     second, remain = parse(remain)
@@ -125,6 +131,8 @@ def parse(b):
         return parse_string(b[1:])
     elif b[0] == 0x10:
         return parse_triplet(b[1:])
+    elif b[0] == 0x0a:
+        return parse_color(b[1:])
     elif b[0] == 0x0b:
         return parse_enum(b[1:])
     elif b[0] == 0x0f:
@@ -134,6 +142,7 @@ def parse(b):
     elif b[0] == 0x15:
         return parse_str_array(b[1:])
     elif b[0] == 0x16:
+        print('parse array', b[:20])
         return parse_array(b[1:])
     elif b[0] == 0x18:
         return parse_dict(b[1:])
