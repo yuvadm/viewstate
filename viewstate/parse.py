@@ -142,7 +142,6 @@ def parse(b):
     elif b[0] == 0x15:
         return parse_str_array(b[1:])
     elif b[0] == 0x16:
-        print('parse array', b[:20])
         return parse_array(b[1:])
     elif b[0] == 0x18:
         return parse_dict(b[1:])
