@@ -17,7 +17,7 @@ class TestParse(object):
 
     def test_string_value(self):
         s = 'abcdefghij'
-        vs = ViewState(raw=b'\xff\x01\x05\x0a' + s.encode())
+        vs = ViewState(raw=b'\xff\x01\x05' + bytes([len(s)]) + s.encode())
         assert vs.decode() == s
 
     def test_simple_dict(self):
