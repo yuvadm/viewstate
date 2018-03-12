@@ -40,6 +40,13 @@ class TestParse(object):
         vs = ViewState(raw=b'\xff\x01\n\x01\x02')
         assert vs.decode() == 'Color: unknown'  # all colors are unknown for now
 
+    def test_formatted_string(self):
+        vs = ViewState()
+        s1 = 'System.Int64, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'
+        s2 = '6111733106'
+        vs.raw = b'\xff\x01()' + bytes([len(s1)]) + s1.encode() + bytes([len(s2)]) + s2.encode()
+        assert vs.decode() == 'Formatted string: {} {}'.format(s2, s1)
+
     def test_complex_pair(self):
         vs = ViewState()
         vs.raw = b'\xff\x01\x0f\x67\x0f\x68\x66'

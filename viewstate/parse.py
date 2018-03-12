@@ -79,6 +79,15 @@ def parse_stringref(b):
     val, remain = parse_int(b)
     return 'Stringref #{}'.format(val), remain
 
+def parse_formatted_string(b):
+    if b[0] == 0x29:
+        s1, remain = parse_string(b[1:])
+        s2, remain = parse_string(remain)
+        return 'Formatted string: {} {}'.format(s2, s1), remain
+    else:
+        raise ViewStateException('Unknown formatted string type marker {}'.format(b[:20]))
+
+
 def parse_sparse_array(b):
     type, remain = parse_type(b)
     length, remain = parse_int(remain)
@@ -147,6 +156,8 @@ def parse(b):
         return parse_dict(b[1:])
     elif b[0] == 0x1f:
         return parse_stringref(b[1:])
+    elif b[0] == 0x28:
+        return parse_formatted_string(b[1:])
     elif b[0] == 0x3c:
         return parse_sparse_array(b[1:])
     else:
