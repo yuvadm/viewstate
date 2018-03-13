@@ -1,5 +1,6 @@
 import pytest
 
+from datetime import datetime
 from os import walk
 from os.path import join
 from viewstate import *
@@ -40,12 +41,24 @@ class TestParse(object):
         vs = ViewState(raw=b'\xff\x01\n\x01\x02')
         assert vs.decode() == 'Color: unknown'  # all colors are unknown for now
 
+    def test_rgba(self):
+        vs = ViewState(raw=b'\xff\x01\x09\x10\x20\x30\x40')
+        assert vs.decode() == 'RGBA(16,32,48,64)'
+
     def test_formatted_string(self):
         vs = ViewState()
         s1 = 'System.Int64, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'
         s2 = '6111733106'
         vs.raw = b'\xff\x01()' + bytes([len(s1)]) + s1.encode() + bytes([len(s2)]) + s2.encode()
         assert vs.decode() == 'Formatted string: {} {}'.format(s2, s1)
+
+    @pytest.mark.skip(reason='Datetime parsing not yet supported')
+    def test_datetime(self):
+        vs = ViewState()
+        vs.raw = b'\xff\x01\x06\x000Po\x9b\x87\xd5\x88'
+        assert vs.decode() == datetime(2018, 3, 11, 22)
+        vs.raw = b'\xff\x01\x06\x00\xf0\xb9\x99d\x88\xd5\x88'
+        assert vs.decode() == datetime(2018, 3, 12, 22)
 
     def test_complex_pair(self):
         vs = ViewState()

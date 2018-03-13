@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from .exceptions import ViewStateException
+
 
 CONSTS = {
     100: None,
@@ -56,6 +59,17 @@ def parse_triplet(b):
     third, remain = parse(remain)
     return (first, second, third), remain
 
+def parse_datetime(b):
+    print([x for x in b[:8]])
+    return datetime(2000, 1, 1), b[8:]
+
+def parse_unit(b):
+    print([x for x in b[:12]])
+    return 'Unit: ', b[12:]
+
+def parse_rgba(b):
+    return 'RGBA({},{},{},{})'.format(*b[:4]), b[4:]
+
 def parse_str_array(b):
     n, remain = parse_int(b)
     l = []
@@ -84,9 +98,12 @@ def parse_formatted_string(b):
         s1, remain = parse_string(b[1:])
         s2, remain = parse_string(remain)
         return 'Formatted string: {} {}'.format(s2, s1), remain
+    elif b[0] == 0x2b:
+        i, remain = parse_int(b[1:])
+        s, remain = parse_string(remain)
+        return 'Formatted string: {} type ref {}'.format(s, i), remain
     else:
         raise ViewStateException('Unknown formatted string type marker {}'.format(b[:20]))
-
 
 def parse_sparse_array(b):
     type, remain = parse_type(b)
@@ -138,6 +155,10 @@ def parse(b):
         return parse_int(b[1:])
     elif b[0] in (0x05, 0x1e):
         return parse_string(b[1:])
+    elif b[0] == 0x06:
+        return parse_datetime(b[1:])
+    elif b[0] == 0x09:
+        return parse_rgba(b[1:])
     elif b[0] == 0x10:
         return parse_triplet(b[1:])
     elif b[0] == 0x0a:
@@ -154,6 +175,8 @@ def parse(b):
         return parse_array(b[1:])
     elif b[0] == 0x18:
         return parse_dict(b[1:])
+    elif b[0] == 0x1b:
+        return parse_unit(b[1:])
     elif b[0] == 0x1f:
         return parse_stringref(b[1:])
     elif b[0] == 0x28:
