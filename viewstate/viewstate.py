@@ -17,6 +17,8 @@ class ViewState(object):
         elif raw:
             self.raw = raw
         self.decoded = None
+        self.mac = None
+        self.signature = None
 
     @property
     def preamble(self):
@@ -39,5 +41,16 @@ class ViewState(object):
     def decode(self):
         if not self.is_valid():
             raise ViewStateException('Cannot decode invalid viewstate, bad preamble')
+
         self.decoded, self.remainder = parse(self.body)
+
+        if self.remainder:
+            if len(self.remainder) == 20:
+                self.mac = 'hmac_sha1'
+            elif len(self.remainder) == 32:
+                self.mac = 'hmac_sha256'
+            else:
+                self.mac = 'unknown'
+            self.signature = self.remainder
+
         return self.decoded

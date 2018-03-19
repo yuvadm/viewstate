@@ -20,17 +20,19 @@ The Viewstate decoder accepts Base64 encoded .NET viewstate data and returns the
 
 There are two main ways to use this package. First, it can be used as an imported library with the following typical use case:
 
-.. code-block:: python
+.. code-block:: pycon
 
-  from viewstate import ViewState
-  vs = ViewState(base64EncodedViewState)
-  decoded_state = vs.decode()
+  >>> from viewstate import ViewState
+  >>> base64_encoded_viewstate = '/wEPBQVhYmNkZQ9nAgE='
+  >>> vs = ViewState(base64_encoded_viewstate)
+  >>> vs.decode()
+  ('abcde', (True, 1))
 
 It is also possible to feed the raw bytes directly:
 
-.. code-block:: python
+.. code-block:: pycon
 
-  vs = ViewState(raw=b'\xff\x01....')
+  >>> vs = ViewState(raw=b'\xff\x01....')
 
 Alternatively, the library can be used via command line by directly executing the module:
 
@@ -39,6 +41,17 @@ Alternatively, the library can be used via command line by directly executing th
   $ cat data.base64 | python -m viewstate
 
 Which will pretty-print the decoded data structure.
+
+Viewstate HMAC signatures are also supported. In case there are any remaining bytes after parsing, they are assumed to be HMAC signatures, with the types estimated according to signature length.
+
+.. code-block:: pycon
+
+   >>> vs = ViewState(signed_view_state)
+   >>> vs.decode()
+   >>> vs.mac
+   'hmac_sha256'
+   >>> vs.signature
+   b'....'
 
 Development
 -----------

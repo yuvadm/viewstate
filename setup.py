@@ -9,7 +9,7 @@ setup(
     name='viewstate',
     author='Yuval Adam',
     author_email='_@yuv.al',
-    version='0.3.0',
+    version='0.3.1',
     description='.NET viewstate decoder',
     long_description=long_description,
     url='https://github.com/yuvadm/viewstate',
