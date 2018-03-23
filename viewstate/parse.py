@@ -3,6 +3,25 @@ from datetime import datetime
 from .exceptions import ViewStateException
 
 
+class ViewStateParser(object):
+    def get_subparsers(self):
+        return {c.marker: c for c in self.__class__.__subclasses__()}
+
+    def parse(self, b):
+        SUBPARSERS = self.get_subparsers()
+        marker, *remain = b
+        try:
+            return SUBPARSERS[marker]().parse(remain)
+        except KeyError:
+            raise ViewStateException('Unknown marker')
+
+
+class Const(object):
+    def parse(self):
+        return self.const, self.remain
+
+class NoneConst(ViewStateParser)
+
 CONSTS = {
     100: None,
     101: '',
@@ -14,39 +33,53 @@ CONSTS = {
 def parse_const(b):
     return CONSTS.get(b, None)
 
-def parse_int(b):
-    n = 0
-    bits = 0
-    i = 0
-    while (bits < 32):
-        tmp = b[i]
-        i += 1
-        n |= (tmp & 0x7f) << bits
-        if not (tmp & 0x80):
-            return n, b[i:]
-        bits += 7
-    return n, b[i:]  # overflow
 
-def parse_string(b):
-    n = b[0]
-    n, remain = parse_int(b)
-    s = remain[:n]
-    return s.decode(), remain[n:]
+class Integer(ViewStateParser):
+    marker = 0x02
 
-def parse_enum(b):
-    if b[0] in (0x29, 0x2a):
-        enum, remain = parse_string(b[1:])
-    elif b[0] == 0x2b:
-        enum, remain = parse_int(b[1:])
-    val, remain = parse_int(remain)  # unsure about this part
-    final = 'Enum: {}, val: {}'.format(enum, val)
-    return final, remain
+    def parse(self, b):
+        n = 0
+        bits = 0
+        i = 0
+        while (bits < 32):
+            tmp = b[i]
+            i += 1
+            n |= (tmp & 0x7f) << bits
+            if not (tmp & 0x80):
+                return n, b[i:]
+            bits += 7
+        return n, b[i:]  # overflow
 
-def parse_color(b):
-    # No specification for color parsing, we're assuming it's just two bytes
-    # One example we have is that `\n\x91\x01` is parsed as `Color: Color [Salmon]`
-    # Originally reported in https://github.com/yuvadm/viewstate/issues/2
-    return 'Color: unknown', b[2:]
+
+class String(ViewStateParser):
+    marker = (0x05, 0x1e)
+
+    def parse(self, b):
+        n = b[0]
+        n, remain = Integer().parse(b)
+        s = remain[:n]
+        return s.decode(), remain[n:]
+
+class Enum(ViewStateParser):
+    marker = 0x0b
+
+    def parse(self, b):
+        if b[0] in (0x29, 0x2a):
+            enum, remain = String().parse(b[1:])
+        elif b[0] == 0x2b:
+            enum, remain = Integer().parse(b[1:])
+        val, remain = Integer().parse(remain)  # unsure about this part
+        final = 'Enum: {}, val: {}'.format(enum, val)
+        return final, remain
+
+class Color(ViewStateParser):
+    marker = 0x0a
+
+    def parse(self, b):
+        # No specification for color parsing, we're assuming it's just two bytes
+        # One example we have is that `\n\x91\x01` is parsed as `Color: Color [Salmon]`
+        # Originally reported in https://github.com/yuvadm/viewstate/issues/2
+        return 'Color: unknown', b[2:]
 
 def parse_pair(b):
     first, remain = parse(b)

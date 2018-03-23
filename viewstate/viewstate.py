@@ -2,7 +2,7 @@ from base64 import b64decode, b64encode
 from binascii import Error as BinAsciiError
 
 from .exceptions import ViewStateException
-from .parse import parse
+from .parse import ViewStateParser
 
 
 class ViewState(object):
@@ -42,7 +42,7 @@ class ViewState(object):
         if not self.is_valid():
             raise ViewStateException('Cannot decode invalid viewstate, bad preamble')
 
-        self.decoded, self.remainder = parse(self.body)
+        self.decoded, self.remainder = ViewStateParser().parse(self.body)
 
         if self.remainder:
             if len(self.remainder) == 20:
