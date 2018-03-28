@@ -3,9 +3,9 @@ from datetime import datetime
 from .exceptions import ViewStateException
 
 
-class ViewStateParserMeta(type):
+class ParserMeta(type):
     def __init__(cls, name, bases, namespace):
-        super(ViewStateParserMeta, cls).__init__(name, bases, namespace)
+        super(ParserMeta, cls).__init__(name, bases, namespace)
         if not hasattr(cls, 'registry'):
             cls.registry = {}
         if hasattr(cls, 'marker'):
@@ -13,17 +13,17 @@ class ViewStateParserMeta(type):
             cls.registry[getattr(cls, 'marker')] = cls
 
 
-class ViewStateParser(metaclass=ViewStateParserMeta):
+class Parser(metaclass=ParserMeta):
 
     def parse(self, b):
         marker, *remain = b
         try:
-            return ViewStateParser.registry[marker]().parse(remain)
+            return Parser.registry[marker]().parse(remain)
         except KeyError:
             raise ViewStateException('Unknown marker')
 
 
-class Const(ViewStateParser):
+class Const(Parser):
     def parse(self, remain):
         return self.const, remain
 
@@ -46,7 +46,7 @@ def parse_const(b):
     return CONSTS.get(b, None)
 
 
-class Integer(ViewStateParser):
+class Integer(Parser):
     marker = 0x02
 
     def parse(self, b):
@@ -63,7 +63,7 @@ class Integer(ViewStateParser):
         return n, b[i:]  # overflow
 
 
-class String(ViewStateParser):
+class String(Parser):
     marker = (0x05, 0x1e)
 
     def parse(self, b):
@@ -72,7 +72,7 @@ class String(ViewStateParser):
         s = remain[:n]
         return s.decode(), remain[n:]
 
-class Enum(ViewStateParser):
+class Enum(Parser):
     marker = 0x0b
 
     def parse(self, b):
@@ -84,7 +84,7 @@ class Enum(ViewStateParser):
         final = 'Enum: {}, val: {}'.format(enum, val)
         return final, remain
 
-class Color(ViewStateParser):
+class Color(Parser):
     marker = 0x0a
 
     def parse(self, b):
@@ -93,7 +93,7 @@ class Color(ViewStateParser):
         # Originally reported in https://github.com/yuvadm/viewstate/issues/2
         return 'Color: unknown', b[2:]
 
-class Pair(ViewStateParser):
+class Pair(Parser):
     marker = 0x0f
 
     def parse(self, b):
