@@ -3,32 +3,44 @@ from datetime import datetime
 from .exceptions import ViewStateException
 
 
-class ViewStateParser(object):
-    def get_subparsers(self):
-        return {c.marker: c for c in self.__class__.__subclasses__()}
+class ViewStateParserMeta(type):
+    def __init__(cls, name, bases, namespace):
+        super(ViewStateParserMeta, cls).__init__(name, bases, namespace)
+        if not hasattr(cls, 'registry'):
+            cls.registry = {}
+        if hasattr(cls, 'marker'):
+            print('registry', cls)
+            cls.registry[getattr(cls, 'marker')] = cls
+
+
+class ViewStateParser(metaclass=ViewStateParserMeta):
 
     def parse(self, b):
-        SUBPARSERS = self.get_subparsers()
         marker, *remain = b
         try:
-            return SUBPARSERS[marker]().parse(remain)
+            return ViewStateParser.registry[marker]().parse(remain)
         except KeyError:
             raise ViewStateException('Unknown marker')
 
 
-class Const(object):
-    def parse(self):
-        return self.const, self.remain
+class Const(ViewStateParser):
+    def parse(self, remain):
+        return self.const, remain
 
-class NoneConst(ViewStateParser)
+
+class TrueConst(Const):
+    marker = 0x67
+    const = True
+
 
 CONSTS = {
-    100: None,
-    101: '',
-    102: 0,
-    103: True,
-    104: False
+    0x64: None,
+    0x65: '',
+    0x66: 0,
+    0x67: True,
+    0x68: False
 }
+
 
 def parse_const(b):
     return CONSTS.get(b, None)
@@ -81,10 +93,13 @@ class Color(ViewStateParser):
         # Originally reported in https://github.com/yuvadm/viewstate/issues/2
         return 'Color: unknown', b[2:]
 
-def parse_pair(b):
-    first, remain = parse(b)
-    second, remain = parse(remain)
-    return (first, second), remain
+class Pair(ViewStateParser):
+    marker = 0x0f
+
+    def parse(self, b):
+        first, remain = parse(b)
+        second, remain = parse(remain)
+        return (first, second), remain
 
 def parse_triplet(b):
     first, remain = parse(b)
