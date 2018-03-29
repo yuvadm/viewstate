@@ -249,6 +249,7 @@ class Dict(Parser):
             d[k] = v
         return d, remain
 
+
 class Type(Parser):
 
     @staticmethod
@@ -259,6 +260,7 @@ class Type(Parser):
             return Integer.parse(b[1:])
         else:
             raise ViewStateException('Unknown type flag at {} bytes {}'.format(len(b), b[:20]))
+
 
 class TypedArray(Parser):
     marker = 0x14
