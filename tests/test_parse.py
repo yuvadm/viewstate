@@ -6,7 +6,7 @@ from os.path import join
 from viewstate import *
 
 
-class TestNewParse(object):
+class TestParse(object):
     def test_const_value(self):
         vs = ViewState(raw=b'\xff\x01\x67')
         assert vs.decode() is True
@@ -20,9 +20,6 @@ class TestNewParse(object):
         vs = ViewState(raw=b'\xff\x01\x05' + bytes([len(s)]) + s.encode())
         assert vs.decode() == s
 
-
-@pytest.mark.skip()
-class TestParse(object):
     def test_simple_dict(self):
         vs = ViewState(raw=b'\xff\x01\x18\x02\x05\x01a\x05\x01b\x05\x01c\x05\x01d')
         assert vs.decode() == {'a': 'b', 'c': 'd'}
