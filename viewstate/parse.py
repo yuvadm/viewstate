@@ -4,7 +4,10 @@ from .exceptions import ViewStateException
 
 
 class ParserMeta(type):
-
+    '''
+    Parser metaclass is used to register each of the parser subclasses `marker` field
+    This field is used to dynamically select the right class for parsing a given byte array
+    '''
     def __init__(cls, name, bases, namespace):
         super(ParserMeta, cls).__init__(name, bases, namespace)
         if not hasattr(cls, 'registry'):
@@ -23,15 +26,16 @@ class Parser(metaclass=ParserMeta):
     def parse(b):
         marker, remain = b[0], b[1:]
         try:
-            return Parser.registry[marker]().parse(remain)
+            return Parser.registry[marker].parse(remain)
         except KeyError:
             raise ViewStateException(f'Unknown marker {marker}')
 
 
 class Const(Parser):
 
-    def parse(self, remain):
-        return self.const, remain
+    @classmethod
+    def parse(cls, remain):
+        return cls.const, remain
 
 
 class NoneConst(Const):
