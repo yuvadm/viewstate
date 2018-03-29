@@ -42,7 +42,7 @@ class ViewState(object):
         if not self.is_valid():
             raise ViewStateException('Cannot decode invalid viewstate, bad preamble')
 
-        self.decoded, self.remainder = Parser().parse(self.body)
+        self.decoded, self.remainder = Parser.parse(self.body)
 
         if self.remainder:
             if len(self.remainder) == 20:
@@ -52,6 +52,5 @@ class ViewState(object):
             else:
                 self.mac = 'unknown'
             self.signature = self.remainder
-
 
         return self.decoded
