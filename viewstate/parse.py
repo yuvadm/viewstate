@@ -9,18 +9,20 @@ class ParserMeta(type):
         if not hasattr(cls, 'registry'):
             cls.registry = {}
         if hasattr(cls, 'marker'):
-            print('registry', cls)
-            cls.registry[getattr(cls, 'marker')] = cls
+            marker = getattr(cls, 'marker')
+            if type(marker) not in (tuple, list):
+                marker = [marker]
+            for m in marker:
+                cls.registry[m] = cls
 
 
 class Parser(metaclass=ParserMeta):
-
     def parse(self, b):
-        marker, *remain = b
+        marker, remain = b[0], b[1:]
         try:
             return Parser.registry[marker]().parse(remain)
         except KeyError:
-            raise ViewStateException('Unknown marker')
+            raise ViewStateException(f'Unknown marker {marker}')
 
 
 class Const(Parser):
@@ -28,22 +30,29 @@ class Const(Parser):
         return self.const, remain
 
 
+class NoneConst(Const):
+    marker = 0x64
+    const = None
+
+
+class EmptyConst(Const):
+    marker = 0x65
+    const = ''
+
+
+class ZeroConst(Const):
+    marker = 0x66
+    const = 0
+
+
 class TrueConst(Const):
     marker = 0x67
     const = True
 
 
-CONSTS = {
-    0x64: None,
-    0x65: '',
-    0x66: 0,
-    0x67: True,
-    0x68: False
-}
-
-
-def parse_const(b):
-    return CONSTS.get(b, None)
+class FalseConst(Const):
+    marker = 0x68
+    const = False
 
 
 class Integer(Parser):

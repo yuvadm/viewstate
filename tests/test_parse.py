@@ -15,16 +15,14 @@ class TestNewParse(object):
         vs = ViewState(raw=b'\xff\x01\x02\x88\x01')
         assert vs.decode() == 136
 
-@pytest.mark.skip()
-class TestParse(object):
-
-
-
     def test_string_value(self):
         s = 'abcdefghij'
         vs = ViewState(raw=b'\xff\x01\x05' + bytes([len(s)]) + s.encode())
         assert vs.decode() == s
 
+
+@pytest.mark.skip()
+class TestParse(object):
     def test_simple_dict(self):
         vs = ViewState(raw=b'\xff\x01\x18\x02\x05\x01a\x05\x01b\x05\x01c\x05\x01d')
         assert vs.decode() == {'a': 'b', 'c': 'd'}
