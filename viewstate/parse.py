@@ -67,7 +67,7 @@ class FalseConst(Const):
 
 
 class Integer(Parser):
-    marker = 0x02
+    marker = (0x02, 0x2b)
 
     @staticmethod
     def parse(b):
@@ -85,7 +85,7 @@ class Integer(Parser):
 
 
 class String(Parser):
-    marker = (0x05, 0x1e)
+    marker = (0x05, 0x1e, 0x2a, 0x29)
 
     @staticmethod
     def parse(b):
@@ -100,10 +100,7 @@ class Enum(Parser):
 
     @staticmethod
     def parse(b):
-        if b[0] in (0x29, 0x2a):
-            enum, remain = String.parse(b[1:])
-        elif b[0] == 0x2b:
-            enum, remain = Integer.parse(b[1:])
+        enum, remain = Parser.parse(b)
         val, remain = Integer.parse(remain)  # unsure about this part
         final = 'Enum: {}, val: {}'.format(enum, val)
         return final, remain
@@ -210,16 +207,9 @@ class FormattedString(Parser):
 
     @staticmethod
     def parse(b):
-        if b[0] == 0x29:
-            s1, remain = String.parse(b[1:])
-            s2, remain = String.parse(remain)
-            return 'Formatted string: {} {}'.format(s2, s1), remain
-        elif b[0] == 0x2b:
-            i, remain = Integer.parse(b[1:])
-            s, remain = String.parse(remain)
-            return 'Formatted string: {} type ref {}'.format(s, i), remain
-        else:
-            raise ViewStateException('Unknown formatted string type marker {}'.format(b[:20]))
+        s1, remain = Parser.parse(b)
+        s2, remain = String.parse(remain)
+        return 'Formatted string: {} type ref {}'.format(s2, s1), remain
 
 
 class SparseArray(Parser):
@@ -227,7 +217,7 @@ class SparseArray(Parser):
 
     @staticmethod
     def parse(b):
-        type, remain = Type.parse(b)
+        type, remain = Parser.parse(b)
         length, remain = Integer.parse(remain)
         n, remain = Integer.parse(remain)
         l = [None] * length
@@ -253,24 +243,12 @@ class Dict(Parser):
         return d, remain
 
 
-class Type(Parser):
-
-    @staticmethod
-    def parse(b):
-        if b[0] in (0x29, 0x2a):
-            return String.parse(b[1:])
-        elif b[0] == 0x2b:
-            return Integer.parse(b[1:])
-        else:
-            raise ViewStateException('Unknown type flag at {} bytes {}'.format(len(b), b[:20]))
-
-
 class TypedArray(Parser):
     marker = 0x14
 
     @staticmethod
     def parse(b):
-        typeval, remain = Type.parse(b)
+        typeval, remain = Parser.parse(b)
         n, remain = Integer.parse(remain)
         l = []
         for _ in range(n):
