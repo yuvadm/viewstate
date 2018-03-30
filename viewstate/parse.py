@@ -21,7 +21,10 @@ class ParserMeta(type):
 
 
 class Parser(metaclass=ParserMeta):
-
+    '''
+    Main parser class delegates parsing according to current byte marker
+    Performs lookup on metaclass registry
+    '''
     @staticmethod
     def parse(b):
         marker, remain = b[0], b[1:]
