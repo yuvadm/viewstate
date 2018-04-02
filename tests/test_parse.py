@@ -50,7 +50,7 @@ class TestParse(object):
         s1 = 'System.Int64, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'
         s2 = '6111733106'
         vs.raw = b'\xff\x01()' + bytes([len(s1)]) + s1.encode() + bytes([len(s2)]) + s2.encode()
-        assert vs.decode() == 'Formatted string: {} {}'.format(s2, s1)
+        assert vs.decode() == 'Formatted string: {} type ref {}'.format(s2, s1)
 
     @pytest.mark.skip(reason='Datetime parsing not yet supported')
     def test_datetime(self):
