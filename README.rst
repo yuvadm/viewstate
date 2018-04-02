@@ -63,8 +63,12 @@ Development
 References
 ----------
 
+Since there is no publically available specification of how .NET viewstate is encoded, reverse engineering was based on prior work:
+
 - https://github.com/mutantzombie/JavaScript-ViewState-Parser
 - http://viewstatedecoder.azurewebsites.net/
+
+Any official documents would be gladly accepted to help improve the parsing logic.
 
 License
 -------
