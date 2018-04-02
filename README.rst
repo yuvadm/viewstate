@@ -1,7 +1,7 @@
 .NET Viewstate Decoder
 ======================
 
-A small Python 3 library for decoding .NET viewstate. Can be used in various scraping scenarios.
+A small Python 3.5+ library for decoding .NET viewstate. Can be used in various scraping scenarios.
 
 .. image:: https://travis-ci.org/yuvadm/viewstate.svg?branch=master
     :target: https://travis-ci.org/yuvadm/viewstate
