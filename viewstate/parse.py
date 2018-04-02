@@ -31,7 +31,7 @@ class Parser(metaclass=ParserMeta):
         try:
             return Parser.registry[marker].parse(remain)
         except KeyError:
-            raise ViewStateException(f'Unknown marker {marker}')
+            raise ViewStateException('Unknown marker {}'.format(marker))
 
 
 class Const(Parser):
