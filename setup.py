@@ -1,16 +1,14 @@
-from html import escape
 from pathlib import Path
 from setuptools import setup, find_packages
 
 with open(str(Path(__file__).resolve().parents[0] / 'README.rst'), encoding='utf-8') as f:
-    # HTML escape to ensure rendering on PyPI
-    long_description = escape(f.read())
+    long_description = f.read()
 
 setup(
     name='viewstate',
     author='Yuval Adam',
     author_email='_@yuv.al',
-    version='0.4.2',
+    version='0.4.3',
     description='.NET viewstate decoder',
     long_description=long_description,
     url='https://github.com/yuvadm/viewstate',
