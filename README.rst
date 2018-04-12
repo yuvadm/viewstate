@@ -42,6 +42,12 @@ Alternatively, the library can be used via command line by directly executing th
 
 Which will pretty-print the decoded data structure.
 
+The command line usage can also accept raw bytes with the `-r` flag:
+
+.. code-block:: shell
+
+  $ cat data.base64 | base64 -d | python -m viewstate -r
+
 Viewstate HMAC signatures are also supported. In case there are any remaining bytes after parsing, they are assumed to be HMAC signatures, with the types estimated according to signature length.
 
 .. code-block:: python
