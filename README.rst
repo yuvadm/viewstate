@@ -42,7 +42,7 @@ Alternatively, the library can be used via command line by directly executing th
 
 Which will pretty-print the decoded data structure.
 
-The command line usage can also accept raw bytes with the `-r` flag:
+The command line usage can also accept raw bytes with the ``-r`` flag:
 
 .. code-block:: shell
 
