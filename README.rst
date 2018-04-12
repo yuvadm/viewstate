@@ -1,7 +1,15 @@
-.NET Viewstate Decoder
+ASP.NET View State Decoder
 ======================
 
-A small Python 3.5+ library for decoding .NET viewstate. Can be used in various scraping scenarios.
+A small Python 3.5+ library for decoding ASP.NET viewstate.
+
+Viewstate is a method used in the ASP.NET framework to persist changes to a web form across postbacks. It is usually saved on a hidden form field:
+
+.. code-block:: html
+
+   <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEP...">
+
+Decoding the view state can be useful in penetration testing on ASP.NET applications, as well as revealing more information that can be used to efficiently scrape web pages.
 
 .. image:: https://travis-ci.org/yuvadm/viewstate.svg?branch=master
     :target: https://travis-ci.org/yuvadm/viewstate
