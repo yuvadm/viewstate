@@ -80,14 +80,15 @@ Development
 References
 ----------
 
-Since there is no publically available specification of how .NET viewstate is encoded, reverse engineering was based on prior work:
+The work on this library is based on publically available implementations from Microsoft:
 
-- https://github.com/mutantzombie/JavaScript-ViewState-Parser
-- http://viewstatedecoder.azurewebsites.net/
-- https://referencesource.microsoft.com/#System.Web/UI/ObjectStateFormatter.cs,45
 - https://msdn.microsoft.com/en-us/library/ms972976.aspx
+- https://referencesource.microsoft.com/#System.Web/UI/ObjectStateFormatter.cs,45
 
-Any official documents would be gladly accepted to help improve the parsing logic.
+Previous versions were based on prior work:
+
+- http://viewstatedecoder.azurewebsites.net/
+- https://github.com/mutantzombie/JavaScript-ViewState-Parser
 
 License
 -------
