@@ -383,15 +383,10 @@ class Array(Parser):
     @staticmethod
     def parse(b):
         n, remain = Integer.parse(b)
-        if n > 400:
-            n, remain = Integer.parse(b)
-
         l = []
         for _ in range(n):
             val, remain = Parser.parse(remain)
             l.append(val)
-        if n>400:
-            print("lel")
         return l, remain
 
 
