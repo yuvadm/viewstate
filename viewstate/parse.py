@@ -41,15 +41,6 @@ class Const(Parser):
         return cls.const, remain
 
 
-class Noop(Parser):
-    # This class is not up to specification. No value should be added to the parsed tree.
-    marker = 0x01
-
-    @staticmethod
-    def parse(b):
-        return None, b
-
-
 class NoneConst(Const):
     marker = 0x64
     const = None
@@ -310,10 +301,17 @@ class Color(Parser):
             "MenuHighlight",
         ]
 
+        color = 'Unknown'
         try:
-            return 'Color: {}'.format(color_table[b[0]]), b[1:]
+            color = 'Color: {}'.format(color_table[b[0]])
         except IndexError:
-            return 'Color: Unknown', b[1:]
+            pass
+
+        # If color packet ends with `\x01`
+        if len(b) > 1 and b[1] == 1:
+            return color, b[2:]
+        else:
+            return color, b[1:]
 
 
 class Pair(Parser):
@@ -385,10 +383,15 @@ class Array(Parser):
     @staticmethod
     def parse(b):
         n, remain = Integer.parse(b)
+        if n > 400:
+            n, remain = Integer.parse(b)
+
         l = []
         for _ in range(n):
             val, remain = Parser.parse(remain)
             l.append(val)
+        if n>400:
+            print("lel")
         return l, remain
 
 
