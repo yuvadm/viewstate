@@ -38,10 +38,15 @@ class TestParse(object):
         vs = ViewState(raw=b"\xff\x01\x10\x67\x68\x67")
         assert vs.decode() == (True, False, True)
 
-    @pytest.mark.skip(reason="Color parsing is not yet supported")
     def test_color(self):
-        vs = ViewState(raw=b"\xff\x01\n\x91\x01")
+        vs = ViewState(raw=b"\xff\x01\n\x91")
         assert vs.decode() == "Color: Salmon"
+
+        vs = ViewState(raw=b"\xff\x01\n\x8d\x01")
+        assert vs.decode() == "Color: Red"
+
+        vs = ViewState(raw=b"\xff\x01\n\xff")
+        assert vs.decode() == "Color: Unknown"
 
     def test_rgba(self):
         vs = ViewState(raw=b"\xff\x01\x09\x10\x20\x30\x40")

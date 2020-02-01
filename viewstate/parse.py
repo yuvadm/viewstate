@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from .colors import COLORS
 from .exceptions import ViewStateException
 
 
@@ -40,6 +41,14 @@ class Const(Parser):
     @classmethod
     def parse(cls, remain):
         return cls.const, remain
+
+
+class Noop(Parser):
+    marker = 0x01
+
+    @staticmethod
+    def parse(b):
+        return None, b
 
 
 class NoneConst(Const):
@@ -112,10 +121,11 @@ class Color(Parser):
 
     @staticmethod
     def parse(b):
-        # No specification for color parsing, we're assuming it's just two bytes
-        # One example we have is that `\n\x91\x01` is parsed as `Color: Color [Salmon]`
-        # Originally reported in https://github.com/yuvadm/viewstate/issues/2
-        return "Color: unknown", b[2:]
+        try:
+            color = COLORS[b[0]]
+        except IndexError:
+            color = "Unknown"
+        return "Color: {}".format(color), b[1:]
 
 
 class Pair(Parser):
