@@ -45,6 +45,9 @@ class TestParse(object):
         vs = ViewState(raw=b"\xff\x01\n\x8d\x01")
         assert vs.decode() == "Color: Red"
 
+        vs = ViewState(raw=b"\xff\x01\n\xff")
+        assert vs.decode() == "Color: Unknown"
+
     def test_rgba(self):
         vs = ViewState(raw=b"\xff\x01\x09\x10\x20\x30\x40")
         assert vs.decode() == "RGBA(16,32,48,64)"

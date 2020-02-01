@@ -122,10 +122,10 @@ class Color(Parser):
     @staticmethod
     def parse(b):
         try:
-            color = "Color: {}".format(COLORS[b[0]])
+            color = COLORS[b[0]]
         except IndexError:
             color = "Unknown"
-        return color, b[1:]
+        return "Color: {}".format(color), b[1:]
 
 
 class Pair(Parser):
