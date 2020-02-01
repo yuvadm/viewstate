@@ -4,16 +4,17 @@ from .exceptions import ViewStateException
 
 
 class ParserMeta(type):
-    '''
+    """
     Parser metaclass is used to register each of the parser subclasses `marker` field
     This field is used to dynamically select the right class for parsing a given byte array
-    '''
+    """
+
     def __init__(cls, name, bases, namespace):
         super(ParserMeta, cls).__init__(name, bases, namespace)
-        if not hasattr(cls, 'registry'):
+        if not hasattr(cls, "registry"):
             cls.registry = {}
-        if hasattr(cls, 'marker'):
-            marker = getattr(cls, 'marker')
+        if hasattr(cls, "marker"):
+            marker = getattr(cls, "marker")
             if type(marker) not in (tuple, list):
                 marker = [marker]
             for m in marker:
@@ -21,21 +22,21 @@ class ParserMeta(type):
 
 
 class Parser(metaclass=ParserMeta):
-    '''
+    """
     Main parser class delegates parsing according to current byte marker
     Performs lookup on metaclass registry
-    '''
+    """
+
     @staticmethod
     def parse(b):
         marker, remain = b[0], b[1:]
         try:
             return Parser.registry[marker].parse(remain)
         except KeyError:
-            raise ViewStateException('Unknown marker {}'.format(marker))
+            raise ViewStateException("Unknown marker {}".format(marker))
 
 
 class Const(Parser):
-
     @classmethod
     def parse(cls, remain):
         return cls.const, remain
@@ -48,7 +49,7 @@ class NoneConst(Const):
 
 class EmptyConst(Const):
     marker = 0x65
-    const = ''
+    const = ""
 
 
 class ZeroConst(Const):
@@ -67,17 +68,17 @@ class FalseConst(Const):
 
 
 class Integer(Parser):
-    marker = (0x02, 0x2b)
+    marker = (0x02, 0x2B)
 
     @staticmethod
     def parse(b):
         n = 0
         bits = 0
         i = 0
-        while (bits < 32):
+        while bits < 32:
             tmp = b[i]
             i += 1
-            n |= (tmp & 0x7f) << bits
+            n |= (tmp & 0x7F) << bits
             if not (tmp & 0x80):
                 return n, b[i:]
             bits += 7
@@ -85,7 +86,7 @@ class Integer(Parser):
 
 
 class String(Parser):
-    marker = (0x05, 0x1e, 0x2a, 0x29)
+    marker = (0x05, 0x1E, 0x2A, 0x29)
 
     @staticmethod
     def parse(b):
@@ -96,29 +97,29 @@ class String(Parser):
 
 
 class Enum(Parser):
-    marker = 0x0b
+    marker = 0x0B
 
     @staticmethod
     def parse(b):
         enum, remain = Parser.parse(b)
         val, remain = Integer.parse(remain)  # unsure about this part
-        final = 'Enum: {}, val: {}'.format(enum, val)
+        final = "Enum: {}, val: {}".format(enum, val)
         return final, remain
 
 
 class Color(Parser):
-    marker = 0x0a
+    marker = 0x0A
 
     @staticmethod
     def parse(b):
         # No specification for color parsing, we're assuming it's just two bytes
         # One example we have is that `\n\x91\x01` is parsed as `Color: Color [Salmon]`
         # Originally reported in https://github.com/yuvadm/viewstate/issues/2
-        return 'Color: unknown', b[2:]
+        return "Color: unknown", b[2:]
 
 
 class Pair(Parser):
-    marker = 0x0f
+    marker = 0x0F
 
     @staticmethod
     def parse(b):
@@ -143,17 +144,17 @@ class Datetime(Parser):
 
     @staticmethod
     def parse(b):
-        #print([x for x in b[:8]])
+        # print([x for x in b[:8]])
         return datetime(2000, 1, 1), b[8:]
 
 
 class Unit(Parser):
-    marker = 0x1b
+    marker = 0x1B
 
     @staticmethod
     def parse(b):
-        #print([x for x in b[:12]])
-        return 'Unit: ', b[12:]
+        # print([x for x in b[:12]])
+        return "Unit: ", b[12:]
 
 
 class RGBA(Parser):
@@ -161,7 +162,7 @@ class RGBA(Parser):
 
     @staticmethod
     def parse(b):
-        return 'RGBA({},{},{},{})'.format(*b[:4]), b[4:]
+        return "RGBA({},{},{},{})".format(*b[:4]), b[4:]
 
 
 class StringArray(Parser):
@@ -173,7 +174,7 @@ class StringArray(Parser):
         l = []
         for _ in range(n):
             if not remain[0]:
-                val, remain = '', remain[1:]
+                val, remain = "", remain[1:]
             else:
                 val, remain = String.parse(remain)
             l.append(val)
@@ -194,12 +195,12 @@ class Array(Parser):
 
 
 class StringRef(Parser):
-    marker = 0x1f
+    marker = 0x1F
 
     @staticmethod
     def parse(b):
         val, remain = Integer.parse(b)
-        return 'Stringref #{}'.format(val), remain
+        return "Stringref #{}".format(val), remain
 
 
 class FormattedString(Parser):
@@ -209,11 +210,11 @@ class FormattedString(Parser):
     def parse(b):
         s1, remain = Parser.parse(b)
         s2, remain = String.parse(remain)
-        return 'Formatted string: {} type ref {}'.format(s2, s1), remain
+        return "Formatted string: {} type ref {}".format(s2, s1), remain
 
 
 class SparseArray(Parser):
-    marker = 0x3c
+    marker = 0x3C
 
     @staticmethod
     def parse(b):

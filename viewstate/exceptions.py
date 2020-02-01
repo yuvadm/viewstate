@@ -1,4 +1,2 @@
-
-
 class ViewStateException(Exception):
     pass

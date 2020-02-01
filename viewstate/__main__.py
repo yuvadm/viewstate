@@ -15,6 +15,6 @@ def main(raw=False):
     pp.pprint(vs.decode())
 
 
-if __name__ == '__main__':
-    raw = len(sys.argv) > 1 and sys.argv[1] == '-r'
+if __name__ == "__main__":
+    raw = len(sys.argv) > 1 and sys.argv[1] == "-r"
     main(raw)
