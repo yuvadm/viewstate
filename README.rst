@@ -11,8 +11,11 @@ Viewstate is a method used in the ASP.NET framework to persist changes to a web 
 
 Decoding the view state can be useful in penetration testing on ASP.NET applications, as well as revealing more information that can be used to efficiently scrape web pages.
 
-.. image:: https://travis-ci.org/yuvadm/viewstate.svg?branch=master
-    :target: https://travis-ci.org/yuvadm/viewstate
+.. image:: https://github.com/yuvadm/viewstate/workflows/Build/badge.svg
+    :target: https://github.com/yuvadm/viewstate/actions
+
+.. image:: https://img.shields.io/pypi/v/viewstate
+    :target: https://pypi.org/project/viewstate/
 
 Install
 -------
