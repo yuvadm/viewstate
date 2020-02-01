@@ -21,6 +21,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install black pytest
     - name: Check formatting with black
+      if: matrix.python-version != 3.5
       run: |
         black --check .
     - name: Test with pytest
