@@ -73,7 +73,7 @@ Viewstate HMAC signatures are also supported. In case there are any remaining by
 Development
 -----------
 
-Development packages can be installed with `pipenv`. Unit tests and code formatting tasks can be run with the builtin scripts:
+Development packages can be installed with ``pipenv``. Unit tests and code formatting tasks can be run with the builtin scripts:
 
 .. code-block:: shell
 
@@ -81,7 +81,7 @@ Development packages can be installed with `pipenv`. Unit tests and code formatt
   $ pipenv run test
   $ pipenv run format
 
-For PyPI releases, follow the build, check and upload scripts (note that a valid PyPI auth token should be defined in `~/.pypirc`):
+For PyPI releases, follow the build, check and upload scripts.
 
 .. code-block:: shell
 
@@ -89,6 +89,7 @@ For PyPI releases, follow the build, check and upload scripts (note that a valid
   $ pipenv run check
   $ pipenv run upload
 
+Note that for uploading a new package version, a valid PyPI auth token should be defined in ``~/.pypirc``.
 
 References
 ----------
