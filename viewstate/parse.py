@@ -302,9 +302,9 @@ class Color(Parser):
             "MenuHighlight",
         ]
 
-        color = 'Unknown'
+        color = "Unknown"
         try:
-            color = 'Color: {}'.format(color_table[b[0]])
+            color = "Color: {}".format(color_table[b[0]])
         except IndexError:
             pass
 
