@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v2
@@ -21,7 +21,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install black pytest
     - name: Check formatting with black
-      if: matrix.python-version != 3.5
       run: |
         black --check .
     - name: Test with pytest
