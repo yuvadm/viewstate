@@ -10,7 +10,7 @@ setup(
     name="viewstate",
     author="Yuval Adam",
     author_email="_@yuv.al",
-    version="0.4.3",
+    version="0.5.0",
     description="ASP.NET View State Decoder",
     long_description=long_description,
     url="https://github.com/yuvadm/viewstate",
