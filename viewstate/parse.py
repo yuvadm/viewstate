@@ -266,3 +266,13 @@ class TypedArray(Parser):
             val, remain = Parser.parse(remain)
             l.append(val)
         return l, remain
+
+
+class BinaryFormatted(Parser):
+    marker = 0x32
+
+    @staticmethod
+    def parse(b):
+        n, remain = Integer.parse(b)
+        val = remain[:n]
+        return "Binary: {}".format(val), remain[n:]
