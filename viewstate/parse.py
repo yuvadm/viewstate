@@ -2,6 +2,7 @@ from datetime import datetime
 
 from .colors import COLORS
 from .exceptions import ViewStateException
+from .utils import list_to_tuple
 
 
 class ParserMeta(type):
@@ -250,7 +251,11 @@ class Dict(Parser):
         for _ in range(n):
             k, remain = Parser.parse(remain)
             v, remain = Parser.parse(remain)
-            d[k] = v
+            try:
+                d[k] = v
+            except TypeError:
+                # make the key hashable by deep converting lists to tuples
+                d[list_to_tuple(k)] = v
         return d, remain
 
 
