@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "viewstate"
+version = "0.6.0"
+description = "ASP.NET View State Decoder"
+authors = ["Yuval Adam <_@yuv.al>"]
+license = "MIT"
+readme = "README.rst"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
