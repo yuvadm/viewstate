@@ -1,7 +1,7 @@
 ASP.NET View State Decoder
 ==========================
 
-A small Python 3.5+ library for decoding ASP.NET viewstate.
+A small Python library for decoding ASP.NET viewstate.
 
 Viewstate is a method used in the ASP.NET framework to persist changes to a web form across postbacks. It is usually saved on a hidden form field:
 
@@ -73,23 +73,22 @@ Viewstate HMAC signatures are also supported. In case there are any remaining by
 Development
 -----------
 
-Development packages can be installed with ``pipenv``. Unit tests and code formatting tasks can be run with the builtin scripts:
+Development packages can be installed with ``poetry``. Unit tests, lints and code formatting tasks can be run with:
 
 .. code-block:: shell
 
-  $ pipenv sync -d
-  $ pipenv run test
-  $ pipenv run format
+  $ poetry install
+  $ poetry run pytest
+  $ poetry run ruff
 
-For PyPI releases, follow the build, check and upload scripts.
+For PyPI releases, run build and publish:
 
 .. code-block:: shell
 
-  $ pipenv run build
-  $ pipenv run check
-  $ pipenv run upload
+  $ poetry build
+  $ poetry publish
 
-Note that for uploading a new package version, a valid PyPI auth token should be defined in ``~/.pypirc``.
+Note that for uploading a new package version, a valid PyPI auth token should be configured.
 
 References
 ----------
