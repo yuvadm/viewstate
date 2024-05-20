@@ -3,7 +3,7 @@ import pytest
 from datetime import datetime
 from os import walk
 from os.path import join
-from viewstate import *
+from viewstate import ViewState, ViewStateException
 
 
 class TestParse(object):

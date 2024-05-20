@@ -18,5 +18,7 @@ jobs:
           uses: abatilo/actions-poetry@v2
         - name: Poetry install
           run: poetry install
-        - name: Run build
+        - name: Run unit tests
           run: poetry run pytest
+        - name: Check for lints
+          run: poetry run ruff check

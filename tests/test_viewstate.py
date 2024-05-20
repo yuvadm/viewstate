@@ -2,7 +2,7 @@ import pytest
 
 from os import walk
 from os.path import join
-from viewstate import *
+from viewstate import ViewState, ViewStateException
 
 
 class TestViewState(object):
@@ -19,7 +19,7 @@ class TestViewState(object):
 
     def test_invalid_base64(self):
         with pytest.raises(ViewStateException):
-            vs = ViewState("hello")
+            ViewState("hello")
 
     def test_invalid_decode(self):
         with pytest.raises(ViewStateException):

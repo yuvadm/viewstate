@@ -181,14 +181,14 @@ class StringArray(Parser):
     @staticmethod
     def parse(b):
         n, remain = Integer.parse(b)
-        l = []
+        lst = []
         for _ in range(n):
             if not remain[0]:
                 val, remain = "", remain[1:]
             else:
                 val, remain = String.parse(remain)
-            l.append(val)
-        return l, remain
+            lst.append(val)
+        return lst, remain
 
 
 class Array(Parser):
@@ -197,11 +197,11 @@ class Array(Parser):
     @staticmethod
     def parse(b):
         n, remain = Integer.parse(b)
-        l = []
+        lst = []
         for _ in range(n):
             val, remain = Parser.parse(remain)
-            l.append(val)
-        return l, remain
+            lst.append(val)
+        return lst, remain
 
 
 class StringRef(Parser):
@@ -231,12 +231,12 @@ class SparseArray(Parser):
         type, remain = Parser.parse(b)
         length, remain = Integer.parse(remain)
         n, remain = Integer.parse(remain)
-        l = [None] * length
+        lst = [None] * length
         for _ in range(n):
             idx, remain = Integer.parse(remain)
             val, remain = Parser.parse(remain)
-            l[idx] = val
-        return l, remain
+            lst[idx] = val
+        return lst, remain
 
 
 class Dict(Parser):
@@ -261,11 +261,11 @@ class TypedArray(Parser):
     def parse(b):
         typeval, remain = Parser.parse(b)
         n, remain = Integer.parse(remain)
-        l = []
+        lst = []
         for _ in range(n):
             val, remain = Parser.parse(remain)
-            l.append(val)
-        return l, remain
+            lst.append(val)
+        return lst, remain
 
 
 class BinaryFormatted(Parser):

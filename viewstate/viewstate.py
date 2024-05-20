@@ -1,4 +1,4 @@
-from base64 import b64decode, b64encode
+from base64 import b64decode
 from binascii import Error as BinAsciiError
 
 from .exceptions import ViewStateException
@@ -11,7 +11,7 @@ class ViewState(object):
             self.base64 = base64
             try:
                 self.raw = b64decode(self.base64)
-            except BinAsciiError as bae:
+            except BinAsciiError:
                 raise ViewStateException("Cannot decode base64 input")
         elif raw:
             self.raw = raw
