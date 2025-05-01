@@ -1,7 +1,8 @@
 __pycache__
 *.pyc
 .pytest_cache
+.python-version
 build/
 dist/
 *.egg-info/
-poetry.lock
+uv.lock
