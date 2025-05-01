@@ -73,20 +73,20 @@ Viewstate HMAC signatures are also supported. In case there are any remaining by
 Development
 -----------
 
-Development packages can be installed with ``poetry``. Unit tests, lints and code formatting tasks can be run with:
+Development packages can be installed with ``uv``. Unit tests, lints and code formatting tasks can be run with:
 
 .. code-block:: shell
 
-  $ poetry install
-  $ poetry run pytest
-  $ poetry run ruff
+  $ uv sync --group dev
+  $ uv run pytest
+  $ uv run ruff
 
 For PyPI releases, run build and publish:
 
 .. code-block:: shell
 
-  $ poetry build
-  $ poetry publish
+  $ uv build
+  $ uv publish
 
 Note that for uploading a new package version, a valid PyPI auth token should be configured.
 
