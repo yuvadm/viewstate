@@ -5,6 +5,8 @@ description = "ASP.NET View State Decoder"
 authors = ["Yuval Adam <_@yuv.al>"]
 license = "MIT"
 readme = "README.rst"
+homepage = "https://github.com/yuvadm/viewstate"
+repository = "https://github.com/yuvadm/viewstate"
 requires-python = ">=3.8"
 dependencies = []
 
