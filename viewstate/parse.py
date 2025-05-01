@@ -116,6 +116,11 @@ class Enum(Parser):
         return final, remain
 
 
+class EmptyColor(Const):
+    marker = 0x0C
+    const = "Color: Empty"
+
+
 class Color(Parser):
     marker = 0x0A
 
